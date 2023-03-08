@@ -1,0 +1,19 @@
+services:
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    user: "${UID}:${GID}"
+    container_name: 'sd-task-1_rabbitmq'
+    depends_on:
+      - redis
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./docker/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./docker/rabbitmq/log/:/var/log/rabbitmq
