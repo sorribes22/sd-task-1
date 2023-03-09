@@ -1,18 +1,18 @@
+import time
 from concurrent import futures
-from datetime import time
 import grpc
 
-from src.implementation1.gRPC import MeteoServer_pb2
-from src.implementation1.gRPC import MeteoServer_pb2_grpc
+import MeteoServer_pb2
+import MeteoServer_pb2_grpc
 
-from src.implementation1.gRPC.LoadBalancerService import lb_service
+from LoadBalancerService import lb_service
 
 
 # create a class to define the server functions
 class LoadBalancerServicer(MeteoServer_pb2_grpc.LoadBalancerServiceServicer):
 
     def SendMeteoData(self, rawMeteoData, context):
-        lb_service.send_meteo_data(rawMeteoData.temperature, rawMeteoData.humidity, rawMeteoData.timestamp)
+        lb_service.send_meteo_data(rawMeteoData.temperature, rawMeteoData.humidity)
         response = MeteoServer_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 

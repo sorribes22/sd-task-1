@@ -1,11 +1,14 @@
+import datetime
 import time
 
 from src.implementation1.meteo_utils import MeteoDataDetector
+
+#from src.implementation1.meteo_utils import MeteoDataDetector
 from src.implementation1.sensor.RawMeteoData import RawMeteoData
 from src.implementation1.sensor.Sensor import Sensor
 import grpc
 
-from src.implementation1.gRPC import MeteoServer_pb2
+import MeteoServer_pb2
 from src.implementation1.gRPC import MeteoServer_pb2_grpc
 
 
@@ -13,7 +16,9 @@ from src.implementation1.gRPC import MeteoServer_pb2_grpc
 
 class AirSensor(Sensor):
     def _send_data(self):
-        rawMeteoData = MeteoServer_pb2.RawMeteoData(temperature=self._detector.gen_temperature(),humidity=self.gen_temperature(),timestamp=time.time())
+        date = datetime.datetime.now()
+        print(type(self._detector.gen_humidity()))
+        rawMeteoData = MeteoServer_pb2.RawMeteoData(temperature=self._detector.gen_temperature(),humidity=self._detector.gen_humidity())
         stub.SendMeteoData(rawMeteoData)
 
 

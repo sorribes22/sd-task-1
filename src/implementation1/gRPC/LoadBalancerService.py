@@ -1,6 +1,6 @@
 class LoadBalancerService:
-    def send_meteo_data(self, temperature, humidity, timestamp):
-        print('Data recived' + temperature + ' ' + humidity + ' ' + timestamp)
+    def send_meteo_data(self, temperature, humidity):
+        print('Data recived' + temperature + ' ' + humidity)
         return 'Done'
 
     def send_pollution_data(self, co2, timestamp):
