@@ -5,6 +5,7 @@ services:
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning
+    container_name: 'sd-task-1_redis'
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
