@@ -5,7 +5,7 @@ import "google/protobuf/timestamp.proto";
 message RawMeteoData {
   float temperature = 1;
   float humidity = 2;
-
+  google.protobuf.Timestamp timestamp = 3;
 }
 
 message RawPollutionData {
