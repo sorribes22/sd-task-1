@@ -22,12 +22,12 @@ To check the RabbitMQ services you can go to http://localhost:15672/ and log wit
 =======
 ## Proto compilation
 ```bash
-cd src/implementation1/gRPC
+GRPC_PATH="./src/implementation1/gRPC/"
 
 python3 -m grpc_tools.protoc \
--I=./ \
---python_out=. \
---grpc_python_out=. \
---pyi_out=. \
-MeteoServer.proto
+-I="$GRPC_PATH" \
+--python_out="$GRPC_PATH" \
+--grpc_python_out="$GRPC_PATH" \
+--pyi_out="$GRPC_PATH" \
+"$GRPC_PATH"MeteoServer.proto
 ```
