@@ -12,12 +12,12 @@ from dotenv import load_dotenv
 class LoadBalancerServicer(MeteoServer__pb2_grpc.LoadBalancerServiceServicer):
 
     def SendMeteoData(self, raw_meteo_data, context):
-        lb_service.send_meteo_data(raw_meteo_data.temperature, raw_meteo_data.humidity)
+        lb_service.send_meteo_data(raw_meteo_data.temperature, raw_meteo_data.humidity, raw_meteo_data.timestamp)
         response = MeteoServer__pb2.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
     def SendPollutionData(self, raw_pollution_data, context):
-        lb_service.send_pollution_data(raw_pollution_data.co2)
+        lb_service.send_pollution_data(raw_pollution_data.co2, raw_pollution_data.timestamp)
         response = MeteoServer__pb2.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
