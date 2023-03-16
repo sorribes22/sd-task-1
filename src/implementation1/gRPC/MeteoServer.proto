@@ -1,16 +1,16 @@
 syntax = "proto3";
 import "google/protobuf/empty.proto";
-import "google/protobuf/timestamp.proto";
+//import "google/protobuf/timestamp.proto";
 
 message RawMeteoData {
   float temperature = 1;
   float humidity = 2;
-  google.protobuf.Timestamp timestamp = 3;
+//  google.protobuf.Timestamp timestamp = 3;
 }
 
 message RawPollutionData {
-  int32 co2 = 1;
-  google.protobuf.Timestamp timestamp = 2;
+  float co2 = 1;
+//  google.protobuf.Timestamp timestamp = 2;
 }
 
 service LoadBalancerService {
