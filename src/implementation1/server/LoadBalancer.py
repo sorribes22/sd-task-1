@@ -29,7 +29,7 @@ server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 MeteoServer__pb2_grpc.add_LoadBalancerServiceServicer_to_server(LoadBalancerServicer(), server)
 
 load_dotenv()
-rabbitmq_port = os.getenv('RABBITMQ_PORT')
+rabbitmq_port = os.getenv('GRPC_LOAD_BALANCER_PORT')
 print('Starting LoadBalancer. Listening on port {host}'.format(host=rabbitmq_port))
 server.add_insecure_port('0.0.0.0:{host}'.format(host=rabbitmq_port))
 server.start()

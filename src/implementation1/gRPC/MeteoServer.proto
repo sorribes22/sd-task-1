@@ -9,7 +9,7 @@ message RawMeteoData {
 }
 
 message RawPollutionData {
-  int32 co2 = 1;
+  float co2 = 1;
   google.protobuf.Timestamp timestamp = 2;
 }
 
