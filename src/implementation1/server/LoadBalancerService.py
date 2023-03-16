@@ -1,14 +1,10 @@
 from datetime import datetime
-from google.protobuf.timestamp_pb2 import Timestamp
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
 
 
 class LoadBalancerService:
     def send_meteo_data(self, temperature, humidity, timestamp):
-        seconds = timestamp.ToSeconds()
-        nanos = timestamp.ToNanoseconds()
-        proto_timestamp = Timestamp(seconds=seconds, nanos=nanos)
-        print((Timestamp(timestamp)).ToDatetime())
-        print(datetime.fromtimestamp(timestamp))
+        #print(datetime.fromtimestamp(timestamp))
         print('Data recived: tmp={tmp} hum={hum} time={time}'.format(
             tmp=str(temperature),
             hum=str(humidity),
