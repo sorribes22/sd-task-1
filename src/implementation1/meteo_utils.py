@@ -17,7 +17,6 @@ OPTIMAL_TEMPERATURE = 20
 OPTIMAL_CO2 = 400
 OPTIMAL_HUMIDITY = 40
 
-
 MIN_PROCESS_TIME = 0.5
 MAX_PROCESS_TIME = 3.5
 
@@ -98,7 +97,7 @@ class MeteoDataDetector:
         Returns random air condition parameter values within the detector's ranges.
         :return: { "co2" : c (float) }
         """
-        return { "co2": self.gen_co2() }
+        return {"co2": self.gen_co2()}
 
 
 class MeteoDataProcessor:
@@ -146,7 +145,6 @@ class MeteoDataProcessor:
         their respective values within the accepted ranges.
         """
 
-
         # Get the wellness value of each parameter based on the processor's distributions.
         temperature_wellness = _value_from_distribution(self.temperature_space, self.temperature_vals,
                                                         meteo_data.temperature)
@@ -173,10 +171,8 @@ class MeteoDataProcessor:
 
         return co2_wellness
 
-
     def _simulate_execution_time(self):
         time.sleep(random.uniform(MIN_PROCESS_TIME, MAX_PROCESS_TIME))
-
 
 
 def _gen_distribution(min_val, max_val, opt_val):

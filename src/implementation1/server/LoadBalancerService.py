@@ -1,5 +1,7 @@
 from datetime import datetime
 from google.protobuf.timestamp_pb2 import Timestamp
+
+
 class LoadBalancerService:
     def send_meteo_data(self, temperature, humidity, timestamp):
         seconds = timestamp.ToSeconds()
