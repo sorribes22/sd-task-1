@@ -2,8 +2,8 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import src.implementation1.gRPC.MeteoServer_pb2 as MeteoServer__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
+from src.implementation1.gRPC import MeteoServer_pb2 as src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2
 
 
 class LoadBalancerServiceStub(object):
@@ -17,12 +17,12 @@ class LoadBalancerServiceStub(object):
         """
         self.SendMeteoData = channel.unary_unary(
                 '/LoadBalancerService/SendMeteoData',
-                request_serializer=MeteoServer__pb2.RawMeteoData.SerializeToString,
+                request_serializer=src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2.RawMeteoData.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.SendPollutionData = channel.unary_unary(
                 '/LoadBalancerService/SendPollutionData',
-                request_serializer=MeteoServer__pb2.RawPollutionData.SerializeToString,
+                request_serializer=src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2.RawPollutionData.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
 
@@ -47,12 +47,12 @@ def add_LoadBalancerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'SendMeteoData': grpc.unary_unary_rpc_method_handler(
                     servicer.SendMeteoData,
-                    request_deserializer=MeteoServer__pb2.RawMeteoData.FromString,
+                    request_deserializer=src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2.RawMeteoData.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'SendPollutionData': grpc.unary_unary_rpc_method_handler(
                     servicer.SendPollutionData,
-                    request_deserializer=MeteoServer__pb2.RawPollutionData.FromString,
+                    request_deserializer=src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2.RawPollutionData.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
     }
@@ -77,7 +77,7 @@ class LoadBalancerService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/LoadBalancerService/SendMeteoData',
-            MeteoServer__pb2.RawMeteoData.SerializeToString,
+            src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2.RawMeteoData.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -94,7 +94,7 @@ class LoadBalancerService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/LoadBalancerService/SendPollutionData',
-            MeteoServer__pb2.RawPollutionData.SerializeToString,
+            src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2.RawPollutionData.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
