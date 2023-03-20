@@ -45,4 +45,4 @@ description of the contribution.
 
 If we couldn't finish a task in a single work cycle we've done the commit and amend the commit on the next cycle:
 
-`git commit --amend`
+`git commit --amend --force-with-lease`
