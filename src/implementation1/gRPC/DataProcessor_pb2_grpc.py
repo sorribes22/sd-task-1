@@ -3,10 +3,10 @@
 import grpc
 
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
-from src.implementation1.gRPC import MeteoServer_pb2 as src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2
+from src.implementation1.gRPC import DataProcessor_pb2 as src_dot_implementation1_dot_gRPC_dot_DataProcessor__pb2
 
 
-class LoadBalancerServiceStub(object):
+class DataProcessorServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -15,58 +15,58 @@ class LoadBalancerServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.SendMeteoData = channel.unary_unary(
-                '/LoadBalancerService/SendMeteoData',
-                request_serializer=src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2.RawMeteoData.SerializeToString,
+        self.ProcessMeteoData = channel.unary_unary(
+                '/DataProcessorService/ProcessMeteoData',
+                request_serializer=src_dot_implementation1_dot_gRPC_dot_DataProcessor__pb2.RawMeteoDataP.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
-        self.SendPollutionData = channel.unary_unary(
-                '/LoadBalancerService/SendPollutionData',
-                request_serializer=src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2.RawPollutionData.SerializeToString,
+        self.ProcessPollutionData = channel.unary_unary(
+                '/DataProcessorService/ProcessPollutionData',
+                request_serializer=src_dot_implementation1_dot_gRPC_dot_DataProcessor__pb2.RawPollutionDataP.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
 
 
-class LoadBalancerServiceServicer(object):
+class DataProcessorServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def SendMeteoData(self, request, context):
+    def ProcessMeteoData(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def SendPollutionData(self, request, context):
+    def ProcessPollutionData(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_LoadBalancerServiceServicer_to_server(servicer, server):
+def add_DataProcessorServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'SendMeteoData': grpc.unary_unary_rpc_method_handler(
-                    servicer.SendMeteoData,
-                    request_deserializer=src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2.RawMeteoData.FromString,
+            'ProcessMeteoData': grpc.unary_unary_rpc_method_handler(
+                    servicer.ProcessMeteoData,
+                    request_deserializer=src_dot_implementation1_dot_gRPC_dot_DataProcessor__pb2.RawMeteoDataP.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
-            'SendPollutionData': grpc.unary_unary_rpc_method_handler(
-                    servicer.SendPollutionData,
-                    request_deserializer=src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2.RawPollutionData.FromString,
+            'ProcessPollutionData': grpc.unary_unary_rpc_method_handler(
+                    servicer.ProcessPollutionData,
+                    request_deserializer=src_dot_implementation1_dot_gRPC_dot_DataProcessor__pb2.RawPollutionDataP.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'LoadBalancerService', rpc_method_handlers)
+            'DataProcessorService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class LoadBalancerService(object):
+class DataProcessorService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def SendMeteoData(request,
+    def ProcessMeteoData(request,
             target,
             options=(),
             channel_credentials=None,
@@ -76,14 +76,14 @@ class LoadBalancerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/LoadBalancerService/SendMeteoData',
-            src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2.RawMeteoData.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/DataProcessorService/ProcessMeteoData',
+            src_dot_implementation1_dot_gRPC_dot_DataProcessor__pb2.RawMeteoDataP.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def SendPollutionData(request,
+    def ProcessPollutionData(request,
             target,
             options=(),
             channel_credentials=None,
@@ -93,8 +93,8 @@ class LoadBalancerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/LoadBalancerService/SendPollutionData',
-            src_dot_implementation1_dot_gRPC_dot_MeteoServer__pb2.RawPollutionData.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/DataProcessorService/ProcessPollutionData',
+            src_dot_implementation1_dot_gRPC_dot_DataProcessor__pb2.RawPollutionDataP.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

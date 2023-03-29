@@ -3,6 +3,7 @@ import grpc
 import os
 import src.implementation1.gRPC.MeteoServer_pb2 as MeteoServer__pb2
 import src.implementation1.gRPC.MeteoServer_pb2_grpc as MeteoServer__pb2_grpc
+import src.implementation1.gRPC.DataProcessor_pb2_grpc as DataProcessor__pb2_grpc
 from concurrent import futures
 from LoadBalancerService import lb_service
 from dotenv import load_dotenv
@@ -33,6 +34,7 @@ rabbitmq_port = os.getenv('GRPC_LOAD_BALANCER_PORT')
 print('Starting LoadBalancer. Listening on port {host}'.format(host=rabbitmq_port))
 server.add_insecure_port('0.0.0.0:{host}'.format(host=rabbitmq_port))
 server.start()
+
 
 # since server.start() will not block,
 # a sleep-loop is added to keep alive
