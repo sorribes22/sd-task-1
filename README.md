@@ -21,14 +21,12 @@ password.
 
 ## Proto compilation
 ```bash
-GRPC_PATH="./src/implementation1/gRPC/"
-
 python3 -m grpc_tools.protoc \
--I="$GRPC_PATH" \
---python_out="$GRPC_PATH" \
---grpc_python_out="$GRPC_PATH" \
---pyi_out="$GRPC_PATH" \
-"$GRPC_PATH"MeteoServer.proto
+    --proto_path="." \
+    --grpc_python_out="." \
+    --python_out="." \
+    --pyi_out="." \
+    ./src/implementation1/gRPC/*.proto
 ```
 
 ## Workflow
