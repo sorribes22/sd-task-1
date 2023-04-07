@@ -5,12 +5,12 @@ import src.implementation1.gRPC.MeteoServer_pb2 as MeteoServer__pb2
 import src.implementation1.gRPC.MeteoServer_pb2_grpc as MeteoServer__pb2_grpc
 import src.implementation1.gRPC.DataProcessor_pb2_grpc as DataProcessor__pb2_grpc
 from concurrent import futures
-from LoadBalancerService import lb_service
+from src.implementation1.server.LoadBalancerService import lb_service
 from dotenv import load_dotenv
 
 
 # create a class to define the server functions
-class LoadBalancerServicer(MeteoServer__pb2_grpc.LoadBalancerServiceServicer):
+class LoadBalancer(MeteoServer__pb2_grpc.LoadBalancerServiceServicer):
 
     def SendMeteoData(self, raw_meteo_data, context):
         lb_service.send_meteo_data(raw_meteo_data.temperature, raw_meteo_data.humidity, raw_meteo_data.timestamp)
@@ -22,24 +22,28 @@ class LoadBalancerServicer(MeteoServer__pb2_grpc.LoadBalancerServiceServicer):
         response = MeteoServer__pb2.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
+    def start_server(self) -> None:
 
-# create gRPC server
-server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        # create gRPC server
+        server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
-# add the defined class to server
-MeteoServer__pb2_grpc.add_LoadBalancerServiceServicer_to_server(LoadBalancerServicer(), server)
+        # add the defined class to server
+        MeteoServer__pb2_grpc.add_LoadBalancerServiceServicer_to_server(LoadBalancer(), server)
 
-load_dotenv()
-rabbitmq_port = os.getenv('GRPC_LOAD_BALANCER_PORT')
-print('Starting LoadBalancer. Listening on port {host}'.format(host=rabbitmq_port))
-server.add_insecure_port('0.0.0.0:{host}'.format(host=rabbitmq_port))
-server.start()
+        load_dotenv()
+        rabbitmq_port = os.getenv('GRPC_LOAD_BALANCER_PORT')
+        print('Starting LoadBalancer. Listening on port {host}'.format(host=rabbitmq_port))
+        server.add_insecure_port('0.0.0.0:{host}'.format(host=rabbitmq_port))
+        server.start()
+
+        # since server.start() will not block,
+        # a sleep-loop is added to keep alive
+        try:
+            while True:
+                time.sleep(86400)
+        except KeyboardInterrupt:
+            server.stop(0)
 
 
-# since server.start() will not block,
-# a sleep-loop is added to keep alive
-try:
-    while True:
-        time.sleep(86400)
-except KeyboardInterrupt:
-    server.stop(0)
+# lb = LoadBalancer()
+# lb.start_server()

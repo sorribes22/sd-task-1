@@ -19,13 +19,13 @@ class LoadBalancerService:
         self._stub = DataProcessor__pb2_grpc.DataProcessorServiceStub(channel)
 
     def send_meteo_data(self, temperature, humidity, timestamp):
-        print(f'Data recived: tmp={str(temperature)} hum={str(humidity)} timestamp={str(timestamp)}')
+        # print(f'LB Data recived: tmp={str(temperature)} hum={str(humidity)} timestamp={str(timestamp)}')
         self._stub.ProcessMeteoData(
             DataProcessor__pb2.RawMeteoDataP(temperature=temperature, humidity=humidity, timestamp=timestamp))
         return 'Done'
 
     def send_pollution_data(self, co2, timestamp):
-        print(f'Data recived: co2={str(co2)} timestamp={str(timestamp)}')
+        # print(f'LB Data recived: co2={str(co2)} timestamp={str(timestamp)}')
         self._stub.ProcessPollutionData(
             DataProcessor__pb2.RawPollutionDataP(co2=co2, timestamp=timestamp))
         return 'Done'
