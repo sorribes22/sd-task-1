@@ -20,4 +20,4 @@ class PollutionSensor(Sensor):
         return "SendPollutionData"
 
 
-PollutionSensor()
+# PollutionSensor()
