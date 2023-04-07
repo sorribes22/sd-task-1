@@ -19,4 +19,4 @@ class AirSensor(Sensor):
         return "SendMeteoData"
 
 
-AirSensor()
+# AirSensor()
