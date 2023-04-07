@@ -1,6 +1,9 @@
+#!/bin/bash
 import os
 import time
 
+from src.Configuration import Configuration
+from src.implementation1.proxy.Proxy import Proxy
 from src.implementation1.sensor.PollutionSensor import PollutionSensor
 from src.implementation1.sensor.Sensor import Sensor
 from src.implementation1.server.LoadBalancer import LoadBalancer
@@ -9,6 +12,8 @@ from src.implementation1.sensor.AirSensor import AirSensor
 
 import threading
 import sys
+
+from src.implementation1.terminal.Terminal import Terminal
 
 
 def start_all():
@@ -28,7 +33,11 @@ def start_all():
 
 
 def start_terminal():
-    print("Start terminal")
+    terminal_index = int(sys.argv[2])
+
+    terminal_url = Configuration.get('terminal_urls')[terminal_index]
+    terminal = Terminal(terminal_url['port'])
+    terminal.start()
 
 
 def start_load_balancer():
@@ -46,12 +55,16 @@ def start_sensor(s):
     sensor = s()
 
 
+def start_proxy():
+    time.sleep(2)
+    proxy = Proxy()
+    proxy.start()
+
 print("START")
 if len(sys.argv) < 1:
     print("You have to provide parameters")
     sys.exit(1)
-else:
-    print("adeu")
+
 arg1 = sys.argv[1]
 
 switch = {

@@ -15,6 +15,17 @@ docker-compose up -d
 ```
 in the project root. It will deploy a **Redis** and a **RabbitMQ** containers.
 
+### Setting up all infraestructure
+```bash
+venv/bin/python3 main.py terminal 0
+```
+```bash
+venv/bin/python3 main.py terminal 1
+```
+```bash
+venv/bin/python3 main.py all
+```
+
 ## RabbitMQ
 To check the RabbitMQ services you can go to http://localhost:15672/ and log with "user" as user and "password" as a
 password.  
@@ -43,4 +54,7 @@ description of the contribution.
 
 If we couldn't finish a task in a single work cycle we've done the commit and amend the commit on the next cycle:
 
-`git commit --amend --force-with-lease`
+```bash
+git commit --amend
+git push --force-with-lease
+```
