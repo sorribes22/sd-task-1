@@ -7,12 +7,13 @@ from dotenv import load_dotenv
 from google.protobuf import timestamp_pb2 as _timestamp_pb2
 import src.implementation1.gRPC.ClientProxy_pb2_grpc as ClientProxy__pb2_grpc
 import src.implementation1.gRPC.ClientProxy_pb2 as ClientProxy__pb2
+from src.Configuration import Configuration
 
 
 class Proxy:
     _refresh_time = 2
     _redis: redis.Redis = None
-    _terminals = list()
+    _terminals: list[ClientProxy__pb2_grpc.ClientProxyServiceStub] = list()
 
     def _connect_redis(self):
         host = os.getenv('REDIS_HOST')
@@ -24,12 +25,12 @@ class Proxy:
         )
 
     def _connect_terminals(self):
-        terminal_hosts = os.getenv('TERMINAL_HOSTS')
-        for kv in terminal_hosts.split(";"):
-            url = kv.split(":")
-            self._terminals.append(dict(host=url[0], port=url[1]))
-        # print(list(kv.split(":") )
-        # self._terminals = dict(kv.split(":") for kv in terminal_hosts.split(";"))
+        for url_dict in Configuration.get('terminal_urls'):
+            url = '{host}:{port}'.format(host=url_dict['host'],
+                                         port=url_dict['port'])
+            print(f'init {url} stub')
+            channel = grpc.insecure_channel(url)
+            self._terminals.append(ClientProxy__pb2_grpc.ClientProxyServiceStub(channel))
 
     def _send_results(self):
 
@@ -44,35 +45,16 @@ class Proxy:
     def start(self):
         load_dotenv()
 
-        self._connect_redis()
+        # self._connect_redis()
         self._connect_terminals()
-        load_balancer_url = 'localhost:50100'
-        channel = grpc.insecure_channel(load_balancer_url)
-        stub = ClientProxy__pb2_grpc.ClientProxyServiceStub(channel)
 
         while True:
-            print('hola')
-            stub.SendWellnessResults(self._send_results())
+            # TODO multithreading
+            i = 1
+            result = self._send_results()
+            print('sending messages...')
+            for stub in self._terminals:
+                print(f'to terminal {i}')
+                i += 1
+                stub.SendWellnessResults(result)
             time.sleep(self._refresh_time)
-        # load_dotenv()
-        #
-        # load_balancer_url = '{host}:{port}'.format(host=os.getenv('GRPC_LOAD_BALANCER_HOST'),
-        #                                            port=os.getenv('GRPC_LOAD_BALANCER_PORT')
-        #                                            )
-        # channel = grpc.insecure_channel(load_balancer_url)
-        # stub = ClientProxy__pb2_grpc.LoadBalancerServiceStub(channel)
-        #
-        # while True:
-        #     raw_data = self._data_measured()
-        #     func_name = self._grpc_function_name()
-        #     try:
-        #         func = getattr(stub, func_name)
-        #         func(raw_data)
-        #     except AttributeError:
-        #         print(f"{func_name} not found")
-        #
-        #     time.sleep(random.randrange(1, 3))
-
-
-proxy = Proxy()
-proxy.start()
