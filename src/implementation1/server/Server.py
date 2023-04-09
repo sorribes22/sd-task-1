@@ -20,11 +20,13 @@ class Server(DataProcessor__pbs_grpc.DataProcessorServiceServicer):
         server_service.process_meteo_data(raw_meteo_data_p.temperature, raw_meteo_data_p.humidity,
                                           raw_meteo_data_p.timestamp)
         response = DataProcessor__pb2.google_dot_protobuf_dot_empty__pb2.Empty()
+        print("Received in port", self._port)
         return response
 
     def ProcessPollutionData(self, raw_pollution_data_p, context):
         server_service.process_pollution_data(raw_pollution_data_p.co2, raw_pollution_data_p.timestamp)
         response = DataProcessor__pb2.google_dot_protobuf_dot_empty__pb2.Empty()
+        print("Received in port", self._port)
         return response
 
     def start_server(self):
@@ -45,7 +47,6 @@ class Server(DataProcessor__pbs_grpc.DataProcessorServiceServicer):
                 time.sleep(86400)
         except KeyboardInterrupt:
             server.stop(0)
-
 
 # s = Server(20001)
 # s.start_server()
