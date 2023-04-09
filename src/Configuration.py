@@ -19,7 +19,10 @@ class Configuration:
             url = kv.split(":")
             self._config.get('terminal_urls').append(dict(host=url[0], port=url[1]))
 
-        # TODO 'redis_url' redis host:port
+        self._config.update({'redis': dict(
+            host=os.getenv('REDIS_HOST'),
+            port=os.getenv('REDIS_PORT')
+        )})
 
         # TODO 'server_urls': [] grpc host1:port1;host2:port2
 

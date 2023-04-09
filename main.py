@@ -23,7 +23,8 @@ def start_all():
         threading.Thread(target=start_server, args=[20002]),
         threading.Thread(target=start_load_balancer),
         threading.Thread(target=start_sensor, args=[AirSensor]),
-        threading.Thread(target=start_sensor, args=[PollutionSensor])
+        threading.Thread(target=start_sensor, args=[PollutionSensor]),
+        threading.Thread(target=start_proxy)
     }
     for t in threads:
         t.start()
