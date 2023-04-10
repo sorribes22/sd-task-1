@@ -1,14 +1,15 @@
 #!/bin/bash
-import os
 import time
 
 from src.Configuration import Configuration
-from src.implementation1.proxy.Proxy import Proxy
-from src.implementation1.sensor.PollutionSensor import PollutionSensor
-from src.implementation1.sensor.Sensor import Sensor
-from src.implementation1.server.LoadBalancer import LoadBalancer
-from src.implementation1.server.Server import Server
-from src.implementation1.sensor.AirSensor import AirSensor
+from src.implementation1.proxy.Proxy import Proxy as gRPC_Proxy
+from src.implementation1.sensor.PollutionSensor import PollutionSensor as gRPC_PollutionSensor
+from src.implementation1.server.LoadBalancer import LoadBalancer as gRPC_LoadBalancer
+from src.implementation1.server.Server import Server as gRPC_Server
+from src.implementation1.sensor.AirSensor import AirSensor as gRPC_AirSensor
+from src.implementation2.server.Server import Server as rabbitmq_Server
+from src.implementation2.sensor.AirSensor import AirSensor as rabbitmq_AirSensor
+from src.implementation2.sensor.PollutionSensor import PollutionSensor as rabbitmq_PollutionSensor
 
 import threading
 import sys
@@ -16,15 +17,15 @@ import sys
 from src.implementation1.terminal.Terminal import Terminal
 
 
-def start_all():
-    print("Start all")
+def start_grpc_infraestructure():
+    print("Starting gRPC infraestructure...")
     threads = {
-        threading.Thread(target=start_server, args=[20001]),
-        threading.Thread(target=start_server, args=[20002]),
-        threading.Thread(target=start_load_balancer),
-        threading.Thread(target=start_sensor, args=[AirSensor]),
-        threading.Thread(target=start_sensor, args=[PollutionSensor]),
-        threading.Thread(target=start_proxy)
+        threading.Thread(target=start_grpc_server, args=[20001]),
+        threading.Thread(target=start_grpc_server, args=[20002]),
+        threading.Thread(target=start_grpc_load_balancer),
+        threading.Thread(target=start_sensor, args=[gRPC_AirSensor]),
+        threading.Thread(target=start_sensor, args=[gRPC_PollutionSensor]),
+        threading.Thread(target=start_grpc_proxy)
     }
     for t in threads:
         t.start()
@@ -33,7 +34,24 @@ def start_all():
         t.join()
 
 
-def start_terminal():
+def start_rabbitmq_infraestructure():
+    print("Starting RabbitMQ infraestructure...")
+    threads = {
+        threading.Thread(target=start_rabbitmq_server),
+        threading.Thread(target=start_rabbitmq_server),
+        threading.Thread(target=start_grpc_load_balancer),
+        threading.Thread(target=start_sensor, args=[rabbitmq_AirSensor]),
+        threading.Thread(target=start_sensor, args=[rabbitmq_PollutionSensor]),
+        threading.Thread(target=start_grpc_proxy)
+    }
+    for t in threads:
+        t.start()
+
+    for t in threads:
+        t.join()
+
+
+def start_grpc_terminal():
     terminal_index = int(sys.argv[2])
 
     terminal_url = Configuration.get('terminal_urls')[terminal_index]
@@ -41,13 +59,17 @@ def start_terminal():
     terminal.start()
 
 
-def start_load_balancer():
-    load_b = LoadBalancer()
+def start_grpc_load_balancer():
+    load_b = gRPC_LoadBalancer()
     load_b.start_server()
 
 
-def start_server(port: int):
-    server = Server(port)
+def start_grpc_server(port: int):
+    server = gRPC_Server(port)
+    server.start_server()
+
+def start_rabbitmq_server():
+    server = rabbitmq_Server()
     server.start_server()
 
 
@@ -56,10 +78,11 @@ def start_sensor(s):
     sensor = s()
 
 
-def start_proxy():
+def start_grpc_proxy():
     time.sleep(2)
-    proxy = Proxy()
+    proxy = gRPC_Proxy()
     proxy.start()
+
 
 print("START")
 if len(sys.argv) < 1:
@@ -69,8 +92,9 @@ if len(sys.argv) < 1:
 arg1 = sys.argv[1]
 
 switch = {
-    "all": start_all,
-    "terminal": start_terminal
+    "grpc": start_grpc_infraestructure,
+    "grpc_terminal": start_grpc_terminal,
+    "rabbitmq": start_rabbitmq_infraestructure,
 }
 func = switch.get(arg1, lambda: print("invalid case"))
 func()
