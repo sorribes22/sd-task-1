@@ -2,7 +2,44 @@
 ## About this project
 resources/task1_statement.pdf
 
+## Documentation
+### Implementation 1
+| Section                  | Type of communication                                            | Cardinality |
+|--------------------------|------------------------------------------------------------------|:-----------:|
+| Sensors -> Load Balancer | - **Synchronous**<br/>- **Pull**<br/>- Transient<br/>- Stateless |   N -> 1    |
+| Load Balancer -> Servers | - **Synchronous**<br/>- **Pull**<br/>- Transient<br/>- Stateless |   1 -> N    |
+| Proxy -> Terminals       | - **Synchronous**<br/>- **Push**<br/>- Transient<br/>- Stateless |   1 -> N    |
+
+| Single points of failure | Solution |
+|--------------------------|----------|
+|                          |          |
+|                          |          |
+
+### Implementation 2
+| Section            | Type of communication                                             | Cardinality |
+|--------------------|-------------------------------------------------------------------|:-----------:|
+| Sensors -> Servers | - **Asynchronous**<br/>- **Pull**<br/>- Transient<br/>- Stateless |   N -> N    |
+| Proxy -> Terminals | - **Asynchronous**<br/>- **Push**<br/>- Transient<br/>- Stateless |   N -> N    |
+
+
+| Single points of failure | Solution |
+|--------------------------|----------|
+|                          |          |
+|                          |          |
+
+### Comparison between 2 systems
+
+### What does a Message Oriented Middleware provide?
+
+### Briefly describe Redis’ utility as a storage system in this architecture. 
+
 ## Deployment
+### Project requirements
+To install project requirements you can run these commands:
+```bash
+python3 -m venv venv
+venv/bin/python3 -m pip install -r requirements.txt
+```
 ### System requirements
 You will need to have the next packages installed and updated:
 - docker
