@@ -5,7 +5,7 @@ import redis
 import src.implementation1.gRPC.DataProcessor_pb2 as DataProcessor__pb2
 import src.implementation1.gRPC.DataProcessor_pb2_grpc as DataProcessor__pbs_grpc
 from src.Configuration import Configuration
-from src.implementation1.meteo_utils import MeteoDataProcessor
+from src.meteo_utils import MeteoDataProcessor
 
 
 class Server(DataProcessor__pbs_grpc.DataProcessorServiceServicer):

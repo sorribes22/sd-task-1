@@ -53,14 +53,25 @@ docker-compose up -d
 in the project root. It will deploy a **Redis** and a **RabbitMQ** containers.
 
 ### Setting up all infraestructure
+#### gRPC Infraestructure
 ```bash
-venv/bin/python3 main.py terminal 0
+venv/bin/python3 main.py grpc_terminal 0
 ```
 ```bash
-venv/bin/python3 main.py terminal 1
+venv/bin/python3 main.py grpc_terminal 1
 ```
 ```bash
-venv/bin/python3 main.py all
+venv/bin/python3 main.py grpc
+```
+#### RabbitMQ Infraestructure
+```bash
+venv/bin/python3 main.py rabbitmq_terminal 0
+```
+```bash
+venv/bin/python3 main.py rabbitmq_terminal 1
+```
+```bash
+venv/bin/python3 main.py rabbitmq
 ```
 
 ## RabbitMQ
