@@ -6,7 +6,7 @@ import src.implementation1.gRPC.MeteoServer_pb2_grpc as MeteoServer__pb2_grpc
 from abc import ABCMeta, abstractmethod
 from dotenv import load_dotenv
 from google.protobuf import message as _message
-from src.implementation1.meteo_utils import MeteoDataDetector
+from src.meteo_utils import MeteoDataDetector
 
 
 class Sensor(metaclass=ABCMeta):
