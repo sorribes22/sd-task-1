@@ -11,7 +11,7 @@ from src.implementation1.server.RoundRobinLoadBalancer import RoundRobinLoadBala
 
 
 class LoadBalancerService:
-    _load_balancer: RoundRobinLoadBalancer()
+    _load_balancer = RoundRobinLoadBalancer()
 
     def __init__(self):
         load_dotenv()
