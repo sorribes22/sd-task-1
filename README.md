@@ -4,34 +4,38 @@ resources/task1_statement.pdf
 
 ## Documentation
 ### Implementation 1
-| Section                  | Type of communication                                            | Cardinality |
-|--------------------------|------------------------------------------------------------------|:-----------:|
-| Sensors -> Load Balancer | - **Synchronous**<br/>- **Pull**<br/>- Transient<br/>- Stateless |   N -> 1    |
-| Load Balancer -> Servers | - **Synchronous**<br/>- **Pull**<br/>- Transient<br/>- Stateless |   1 -> N    |
-| Proxy -> Terminals       | - **Synchronous**<br/>- **Push**<br/>- Transient<br/>- Stateless |   1 -> N    |
+| Section                   | Type of communication                                               | Cardinality |
+|---------------------------|---------------------------------------------------------------------|:-----------:|
+| Sensors -> Sensor servers | - **Synchronous**<br/>- **Pull**<br/>- Transient<br/>- Stateless    |   1 -> 1    |
+| Sensors -> Load Balancer  | - **Synchronous**<br/>- **Pull**<br/>- Transient<br/>- Stateless    |   1 -> 1    |
+| Load Balancer -> Servers  | - **Synchronous**<br/>- **Pull**<br/>- Transient<br/>- **Stateful** |   1 -> 1    |
+| Proxy -> Terminals        | - **Synchronous**<br/>- **Push**<br/>- Transient<br/>- Stateless    |   1 -> N    |
 
-| Single points of failure | Solution |
-|--------------------------|----------|
-|                          |          |
-|                          |          |
+#### Single points of failure
+##### Load balancer
+This entity is where all the messages between sensors and sensor servers must pass with. If it falls or can not
+manage all requests as fasts as need it could colapse breaking all data detection and procesment.
+##### Solution
 
 ### Implementation 2
 | Section            | Type of communication                                             | Cardinality |
 |--------------------|-------------------------------------------------------------------|:-----------:|
-| Sensors -> Servers | - **Asynchronous**<br/>- **Pull**<br/>- Transient<br/>- Stateless |   N -> N    |
-| Proxy -> Terminals | - **Asynchronous**<br/>- **Push**<br/>- Transient<br/>- Stateless |   N -> N    |
+| Sensors -> Servers | - **Asynchronous**<br/>- **Pull**<br/>- Transient<br/>- Stateless |   1 -> 1    |
+| Proxy -> Terminals | - **Asynchronous**<br/>- **Push**<br/>- Transient<br/>- Stateless |   1 -> N    |
 
 
-| Single points of failure | Solution |
-|--------------------------|----------|
-|                          |          |
-|                          |          |
+#### Single points of failure
+##### SPF
+##### Solution
 
 ### Comparison between 2 systems
 
 ### What does a Message Oriented Middleware provide?
+A MOM such as RabbitMQ provides a simple implementation of all types of communication between services. It allows to
+set up a Asynchronous/Synchronous or Transient/Persistent communication as simple as write 2 or 3 lines of code.
+A correct configuration gives our services a strong decoupling and the possibility to scale up as far as we need.
 
-### Briefly describe Redis’ utility as a storage system in this architecture. 
+### Briefly describe Redis’ utility as a storage system in this architecture.
 
 ## Deployment
 ### Project requirements
@@ -106,3 +110,7 @@ If we couldn't finish a task in a single work cycle we've done the commit and am
 git commit --amend
 git push --force-with-lease
 ```
+## TODO
+On estan els possibles SPF?
+És normal la dependència entre terminals i proxy en grpc? Si
+

@@ -1,5 +1,4 @@
 import datetime
-import threading
 import time
 import grpc
 import redis
@@ -65,7 +64,6 @@ class Proxy:
         self._connect_terminals()
 
         while True:
-            # TODO multithreading
             i = 1
             result = self._calculate_result()
             print('sending messages...')

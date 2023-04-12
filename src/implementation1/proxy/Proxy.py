@@ -1,5 +1,4 @@
 import datetime
-import threading
 import time
 import grpc
 import redis
@@ -37,10 +36,14 @@ class Proxy:
 
     def _calculate_pollution(self) -> tuple:
         keys = self._redis.keys('meteo-pollution-*')
+        if len(keys) == 0:
+            raise Exception('No pollution data found on Redis')
         return self._calculate_mean(keys), keys[-1]
 
     def _calculate_wellness(self) -> tuple:
         keys = self._redis.keys('meteo-wellness-*')
+        if len(keys) == 0:
+            raise Exception('No wellness data found on Redis')
         return self._calculate_mean(keys), keys[-1]
 
     def _calculate_result(self):
@@ -50,7 +53,7 @@ class Proxy:
         air_wellness_at = air_wellness_at[15:]
         pollution_at = pollution_at[16:]
         dispatch_time = (air_wellness_at, pollution_at)[air_wellness_at < pollution_at]
-        dt = datetime.strptime(dispatch_time.decode('utf-8'), '%Y-%m-%d %H:%M:%S.%f')
+        dt = datetime.strptime(dispatch_time.decode('utf-8'), Configuration.get('datetime_format'))
         timestamp = _timestamp_pb2.Timestamp()
         timestamp.FromDatetime(dt)
 
@@ -65,12 +68,15 @@ class Proxy:
         self._connect_terminals()
 
         while True:
-            # TODO multithreading
             i = 1
-            result = self._calculate_result()
-            print('sending messages...')
-            for stub in self._terminals:
-                print(f'to terminal {i}')
-                i += 1
-                stub.SendWellnessResults(result)
+            try:
+                result = self._calculate_result()
+                print('sending messages...')
+                for stub in self._terminals:
+                    print(f'to terminal {i}')
+                    i += 1
+                    stub.SendWellnessResults(result)
+            except Exception as e:
+                pass
+
             time.sleep(self._refresh_time)
