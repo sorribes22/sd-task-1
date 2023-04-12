@@ -13,6 +13,8 @@ class Configuration:
     def reload_env_file(self):
         load_dotenv()
 
+        self._config.update({'datetime_format': '%Y-%m-%d %H:%M:%S.%f'})
+
         terminal_hosts = os.getenv('TERMINAL_HOSTS')
         self._config.update({'terminal_urls': []})
         for kv in terminal_hosts.split(";"):
@@ -22,6 +24,13 @@ class Configuration:
         self._config.update({'redis': dict(
             host=os.getenv('REDIS_HOST'),
             port=os.getenv('REDIS_PORT')
+        )})
+
+        self._config.update({'rabbitmq': dict(
+            host=os.getenv('RABBITMQ_HOST', 'localhost'),
+            port=os.getenv('RABBITMQ_PORT', 5672),
+            user=os.getenv('RABBITMQ_USER'),
+            password=os.getenv('RABBITMQ_PASSWORD')
         )})
 
         # TODO 'server_urls': [] grpc host1:port1;host2:port2
