@@ -24,7 +24,7 @@ class LoadBalancerService:
     def send_meteo_data(self, temperature, humidity, timestamp):
         # print(f'LB Data recived: tmp={str(temperature)} hum={str(humidity)} timestamp={str(timestamp)}')
         stub = self._load_balancer.get_stub()
-        stub.ProcessMeteoData(
+        call_future = stub.ProcessMeteoData.future(
             DataProcessor__pb2.RawMeteoDataP(temperature=temperature, humidity=humidity, timestamp=timestamp))
         self._load_balancer.append_stub(stub)
         return 'Done'
@@ -32,7 +32,7 @@ class LoadBalancerService:
     def send_pollution_data(self, co2, timestamp):
         # print(f'LB Data recived: co2={str(co2)} timestamp={str(timestamp)}')
         stub = self._load_balancer.get_stub()
-        stub.ProcessPollutionData(
+        call_future = stub.ProcessPollutionData.future(
             DataProcessor__pb2.RawPollutionDataP(co2=co2, timestamp=timestamp))
         self._load_balancer.append_stub(stub)
         return 'Done'
