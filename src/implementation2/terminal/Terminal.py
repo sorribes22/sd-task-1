@@ -13,7 +13,12 @@ class Terminal:
         return prefix + raw_data.timestamp
 
     def _print_data(self, ch, method, properties, body):
-        print(body)
+        text = body.decode('utf-8')
+        dic = json.loads(text.replace("'", "\""))
+        air = dic['air']
+        co2 = dic['co2']
+        time_s = dic['timestamp']
+        print("Air:", "{:.3f}".format(air), "CO2:", "{:.3f}".format(co2), "Timestamp:", time_s)
 
     def _connect_rabbitmq(self) -> str:
         connection = pika.BlockingConnection(pika.ConnectionParameters(
@@ -24,14 +29,14 @@ class Terminal:
                 Configuration.get('rabbitmq')['password'])
         ))
         self._channel = connection.channel()
-        self._channel.exchange_declare(exchange='satilla', exchange_type='fanout')
+        self._channel.exchange_declare(exchange='broadcast', exchange_type='fanout')
         result = self._channel.queue_declare(queue='', exclusive=True)
         queue_name = result.method.queue
-        self._channel.queue_bind(exchange='satilla', queue=queue_name)
+        self._channel.queue_bind(exchange='broadcast', queue=queue_name)
         return queue_name
 
     def start(self):
         queue_name = self._connect_rabbitmq()
-        print("Start terminal : ", queue_name)
+        print("Start terminal, Queue name : ", queue_name)
         self._channel.basic_consume(queue=queue_name, on_message_callback=self._print_data, auto_ack=True)
         self._channel.start_consuming()
