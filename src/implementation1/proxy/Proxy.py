@@ -11,7 +11,7 @@ from datetime import datetime
 
 
 class Proxy:
-    _refresh_time = 10
+    _refresh_time = 3
     _redis: redis.Redis = None
     _terminals: list[ClientProxy__pb2_grpc.ClientProxyServiceStub] = list()
 

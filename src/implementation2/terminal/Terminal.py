@@ -1,40 +1,37 @@
 import time
-import grpc
-import src.implementation1.gRPC.ClientProxy_pb2 as ClientProxy__pb2
-import src.implementation1.gRPC.ClientProxy_pb2_grpc as ClientProxy__pb2_grpc
-from concurrent import futures
-from src.implementation1.terminal.TerminalService import terminal_service
+import json
+from src.Configuration import Configuration
+import pika
+from types import SimpleNamespace
+from pika.adapters.blocking_connection import BlockingChannel
 
 
-# create a class to define the server functions
-class Terminal(ClientProxy__pb2_grpc.ClientProxyServiceServicer):
-    _port: int
+class Terminal:
+    _channel: BlockingChannel
 
-    def __init__(self, port: int):
-        self._port = port
+    def _get_key(self, prefix: str, raw_data):
+        return prefix + raw_data.timestamp
 
-    def SendWellnessResults(self, wellness_data, context):
-        terminal_service.send_wellness_results(wellness_data.air, wellness_data.co2, wellness_data.timestamp)
-        response = ClientProxy__pb2.google_dot_protobuf_dot_empty__pb2.Empty()
-        return response
+    def _print_data(self, ch, method, properties, body):
+        print(body)
+
+    def _connect_rabbitmq(self) -> str:
+        connection = pika.BlockingConnection(pika.ConnectionParameters(
+            host=Configuration.get('rabbitmq')['host'],
+            port=Configuration.get('rabbitmq')['port'],
+            credentials=pika.PlainCredentials(
+                Configuration.get('rabbitmq')['user'],
+                Configuration.get('rabbitmq')['password'])
+        ))
+        self._channel = connection.channel()
+        self._channel.exchange_declare(exchange='satilla', exchange_type='fanout')
+        result = self._channel.queue_declare(queue='', exclusive=True)
+        queue_name = result.method.queue
+        self._channel.queue_bind(exchange='satilla', queue=queue_name)
+        return queue_name
 
     def start(self):
-        # create gRPC server
-        server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-
-        # add the defined class to server
-        ClientProxy__pb2_grpc.add_ClientProxyServiceServicer_to_server(self, server)
-
-        print('Starting LoadBalancer. Listening on port {port}'.format(port=self._port))
-        server.add_insecure_port('0.0.0.0:{port}'.format(port=self._port))
-        server.start()
-
-        # since server.start() will not block,
-        # a sleep-loop is added to keep alive
-        try:
-            while True:
-                time.sleep(86400)
-        except KeyboardInterrupt:
-            server.stop(0)
-
-# (Terminal(20100)).start()
+        queue_name = self._connect_rabbitmq()
+        print("Start terminal : ", queue_name)
+        self._channel.basic_consume(queue=queue_name, on_message_callback=self._print_data, auto_ack=True)
+        self._channel.start_consuming()
