@@ -1,5 +1,8 @@
 import json
 import pika
+from colorama import init as colorama_init
+from colorama import Fore
+from colorama import Style
 from src.Configuration import Configuration
 from pika.adapters.blocking_connection import BlockingChannel
 
@@ -16,7 +19,7 @@ class Terminal:
         air = dic['air']
         co2 = dic['co2']
         time_s = dic['timestamp']
-        print("Air:", "{:.3f}".format(air), "CO2:", "{:.3f}".format(co2), "Timestamp:", time_s)
+        print(f"Air: {Fore.GREEN}{air:.3f}{Style.RESET_ALL}, CO2: {Fore.RED}{co2:.3f}{Style.RESET_ALL} - Timestamp: {time_s}")
 
     def _connect_rabbitmq(self) -> str:
         connection = pika.BlockingConnection(pika.ConnectionParameters(
@@ -34,6 +37,8 @@ class Terminal:
         return queue_name
 
     def start(self):
+        colorama_init()
+
         queue_name = self._connect_rabbitmq()
         print("Start terminal, Queue name : ", queue_name)
         self._channel.basic_consume(queue=queue_name, on_message_callback=self._print_data, auto_ack=True)

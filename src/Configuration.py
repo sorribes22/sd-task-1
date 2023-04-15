@@ -38,7 +38,7 @@ class Configuration:
             port=os.getenv('GRPC_LOAD_BALANCER_PORT')
         )})
 
-        terminal_hosts = os.getenv('TERMINAL_HOSTS')
+        terminal_hosts = os.getenv('GRPC_SERVER_URLS')
         self._config.update({'grpc_server_urls': []})
         for kv in terminal_hosts.split(";"):
             self._config.get('grpc_server_urls').append(kv)
