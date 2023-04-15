@@ -107,8 +107,8 @@ docker-compose up -d
 
 in the project root. It will deploy a **Redis** and a **RabbitMQ** containers.
 
-### Setting up all infraestructure
-#### gRPC Infraestructure
+### Setting up all infrastructure
+#### gRPC Infrastructure
 
 To prevent the grpc infrastructure from failing, first turn on the terminals and then execute the main.
 
@@ -124,7 +124,7 @@ venv/bin/python3 main.py grpc_terminal 1
 venv/bin/python3 main.py grpc
 ```
 
-#### RabbitMQ Infraestructure
+#### RabbitMQ Infrastructure
 
 In the case of RabbitMQ, it is not necessary to turn on the terminals first.
 
