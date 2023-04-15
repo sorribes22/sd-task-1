@@ -10,6 +10,8 @@ from src.implementation1.sensor.AirSensor import AirSensor as gRPC_AirSensor
 from src.implementation2.server.Server import Server as rabbitmq_Server
 from src.implementation2.sensor.AirSensor import AirSensor as rabbitmq_AirSensor
 from src.implementation2.sensor.PollutionSensor import PollutionSensor as rabbitmq_PollutionSensor
+from src.implementation2.terminal.Terminal import Terminal as rabbitmq_Terminal
+from src.implementation2.proxy.Proxy import Proxy as rabbitmq_Proxy
 
 import threading
 import sys
@@ -39,10 +41,9 @@ def start_rabbitmq_infraestructure():
     threads = {
         threading.Thread(target=start_rabbitmq_server),
         threading.Thread(target=start_rabbitmq_server),
-        threading.Thread(target=start_grpc_load_balancer),
         threading.Thread(target=start_sensor, args=[rabbitmq_AirSensor]),
         threading.Thread(target=start_sensor, args=[rabbitmq_PollutionSensor]),
-        threading.Thread(target=start_grpc_proxy)
+        threading.Thread(target=start_rabbitmq_proxy)
     }
     for t in threads:
         t.start()
@@ -72,6 +73,17 @@ def start_rabbitmq_server():
     server = rabbitmq_Server()
     server.start_server()
 
+def start_rabbitmq_proxy():
+    time.sleep(2)
+    proxy = rabbitmq_Proxy()
+    proxy.start()
+
+
+def start_rabbitmq_terminal():
+    terminal = rabbitmq_Terminal()
+    terminal.start()
+
+
 
 def start_sensor(s):
     time.sleep(1)
@@ -95,6 +107,8 @@ switch = {
     "grpc": start_grpc_infraestructure,
     "grpc_terminal": start_grpc_terminal,
     "rabbitmq": start_rabbitmq_infraestructure,
+    "rabbitmq_terminal": start_rabbitmq_terminal
+
 }
 func = switch.get(arg1, lambda: print("invalid case"))
 func()

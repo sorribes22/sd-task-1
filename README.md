@@ -69,10 +69,10 @@ venv/bin/python3 main.py grpc
 ```
 #### RabbitMQ Infraestructure
 ```bash
-venv/bin/python3 main.py rabbitmq_terminal 0
+venv/bin/python3 main.py rabbitmq_terminal
 ```
 ```bash
-venv/bin/python3 main.py rabbitmq_terminal 1
+venv/bin/python3 main.py rabbitmq_terminal
 ```
 ```bash
 venv/bin/python3 main.py rabbitmq
