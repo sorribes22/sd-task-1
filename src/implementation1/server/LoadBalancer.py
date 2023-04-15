@@ -5,7 +5,6 @@ import src.implementation1.gRPC.MeteoServer_pb2_grpc as MeteoServer__pb2_grpc
 from concurrent import futures
 from src.Configuration import Configuration
 from src.implementation1.server.LoadBalancerService import lb_service
-from dotenv import load_dotenv
 
 
 class LoadBalancer(MeteoServer__pb2_grpc.LoadBalancerServiceServicer):
@@ -28,7 +27,6 @@ class LoadBalancer(MeteoServer__pb2_grpc.LoadBalancerServiceServicer):
         # add the defined class to server
         MeteoServer__pb2_grpc.add_LoadBalancerServiceServicer_to_server(LoadBalancer(), server)
 
-        load_dotenv()
         port = Configuration.get('load_balancer_url')['port']
         print('Starting LoadBalancer. Listening on port {host}'.format(host=port))
         server.add_insecure_port('0.0.0.0:{host}'.format(host=port))

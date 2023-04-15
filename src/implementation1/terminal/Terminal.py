@@ -3,7 +3,9 @@ import grpc
 import src.implementation1.gRPC.ClientProxy_pb2 as ClientProxy__pb2
 import src.implementation1.gRPC.ClientProxy_pb2_grpc as ClientProxy__pb2_grpc
 from concurrent import futures
-from src.implementation1.terminal.TerminalService import terminal_service
+from colorama import init as colorama_init
+from colorama import Fore
+from colorama import Style
 
 
 class Terminal(ClientProxy__pb2_grpc.ClientProxyServiceServicer):
@@ -13,11 +15,12 @@ class Terminal(ClientProxy__pb2_grpc.ClientProxyServiceServicer):
         self._port = port
 
     def SendWellnessResults(self, wellness_data, context):
-        terminal_service.send_wellness_results(wellness_data.air, wellness_data.co2, wellness_data.timestamp)
+        print(f"Air: {Fore.GREEN}{wellness_data.air:.3f}{Style.RESET_ALL}, CO2: {Fore.RED}{wellness_data.co2:.3f}{Style.RESET_ALL} - Timestamp: {wellness_data.time_s}")
         response = ClientProxy__pb2.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
     def start(self):
+        colorama_init()
         # create gRPC server
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
