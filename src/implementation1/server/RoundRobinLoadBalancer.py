@@ -1,4 +1,3 @@
-import itertools
 import src.implementation1.gRPC.DataProcessor_pb2_grpc as DataProcessor__pb2_grpc
 
 

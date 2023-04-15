@@ -1,8 +1,6 @@
-import time
 import json
-from src.Configuration import Configuration
 import pika
-from types import SimpleNamespace
+from src.Configuration import Configuration
 from pika.adapters.blocking_connection import BlockingChannel
 
 

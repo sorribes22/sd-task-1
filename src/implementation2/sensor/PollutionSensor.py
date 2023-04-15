@@ -16,5 +16,3 @@ class PollutionSensor(Sensor):
 
     def _rabbitmq_channel_routing_key(self) -> str:
         return 'meteo.sensor.co2.raw_data'
-
-# PollutionSensor()

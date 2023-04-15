@@ -1,26 +1,22 @@
-#!/bin/bash
 import time
-
+import threading
+import sys
 from src.Configuration import Configuration
 from src.implementation1.proxy.Proxy import Proxy as gRPC_Proxy
 from src.implementation1.sensor.PollutionSensor import PollutionSensor as gRPC_PollutionSensor
 from src.implementation1.server.LoadBalancer import LoadBalancer as gRPC_LoadBalancer
 from src.implementation1.server.Server import Server as gRPC_Server
 from src.implementation1.sensor.AirSensor import AirSensor as gRPC_AirSensor
+from src.implementation1.terminal.Terminal import Terminal
 from src.implementation2.server.Server import Server as rabbitmq_Server
 from src.implementation2.sensor.AirSensor import AirSensor as rabbitmq_AirSensor
 from src.implementation2.sensor.PollutionSensor import PollutionSensor as rabbitmq_PollutionSensor
 from src.implementation2.terminal.Terminal import Terminal as rabbitmq_Terminal
 from src.implementation2.proxy.Proxy import Proxy as rabbitmq_Proxy
 
-import threading
-import sys
 
-from src.implementation1.terminal.Terminal import Terminal
-
-
-def start_grpc_infraestructure():
-    print("Starting gRPC infraestructure...")
+def start_grpc_infrastructure():
+    print("Starting gRPC infrastructure...")
     threads = {
         threading.Thread(target=start_grpc_server, args=[20001]),
         threading.Thread(target=start_grpc_server, args=[20002]),
@@ -36,8 +32,8 @@ def start_grpc_infraestructure():
         t.join()
 
 
-def start_rabbitmq_infraestructure():
-    print("Starting RabbitMQ infraestructure...")
+def start_rabbitmq_infrastructure():
+    print("Starting RabbitMQ infrastructure...")
     threads = {
         threading.Thread(target=start_rabbitmq_server),
         threading.Thread(target=start_rabbitmq_server),
@@ -69,9 +65,11 @@ def start_grpc_server(port: int):
     server = gRPC_Server(port)
     server.start_server()
 
+
 def start_rabbitmq_server():
     server = rabbitmq_Server()
     server.start_server()
+
 
 def start_rabbitmq_proxy():
     time.sleep(2)
@@ -82,7 +80,6 @@ def start_rabbitmq_proxy():
 def start_rabbitmq_terminal():
     terminal = rabbitmq_Terminal()
     terminal.start()
-
 
 
 def start_sensor(s):
@@ -104,9 +101,9 @@ if len(sys.argv) < 1:
 arg1 = sys.argv[1]
 
 switch = {
-    "grpc": start_grpc_infraestructure,
+    "grpc": start_grpc_infrastructure,
     "grpc_terminal": start_grpc_terminal,
-    "rabbitmq": start_rabbitmq_infraestructure,
+    "rabbitmq": start_rabbitmq_infrastructure,
     "rabbitmq_terminal": start_rabbitmq_terminal
 
 }

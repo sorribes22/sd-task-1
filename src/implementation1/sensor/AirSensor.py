@@ -2,6 +2,7 @@ import src.implementation1.gRPC.MeteoServer_pb2 as MeteoServer__pb2
 from src.implementation1.sensor.Sensor import Sensor
 from google.protobuf import timestamp_pb2 as _timestamp_pb2
 
+
 class AirSensor(Sensor):
     def __init__(self):
         super().__init__()
@@ -17,6 +18,3 @@ class AirSensor(Sensor):
 
     def _grpc_function_name(self) -> str:
         return "SendMeteoData"
-
-
-# AirSensor()

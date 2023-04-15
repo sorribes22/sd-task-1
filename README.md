@@ -56,8 +56,8 @@ docker-compose up -d
 ```
 in the project root. It will deploy a **Redis** and a **RabbitMQ** containers.
 
-### Setting up all infraestructure
-#### gRPC Infraestructure
+### Setting up all infrastructure
+#### gRPC Infrastructure
 ```bash
 venv/bin/python3 main.py grpc_terminal 0
 ```
@@ -67,7 +67,7 @@ venv/bin/python3 main.py grpc_terminal 1
 ```bash
 venv/bin/python3 main.py grpc
 ```
-#### RabbitMQ Infraestructure
+#### RabbitMQ Infrastructure
 ```bash
 venv/bin/python3 main.py rabbitmq_terminal
 ```
@@ -110,7 +110,3 @@ If we couldn't finish a task in a single work cycle we've done the commit and am
 git commit --amend
 git push --force-with-lease
 ```
-## TODO
-On estan els possibles SPF?
-És normal la dependència entre terminals i proxy en grpc? Si
-
