@@ -108,7 +108,6 @@ docker-compose up -d
 in the project root. It will deploy a **Redis** and a **RabbitMQ** containers.
 
 ### Setting up all infraestructure
-
 #### gRPC Infraestructure
 
 To prevent the grpc infrastructure from failing, first turn on the terminals and then execute the main.

@@ -1,9 +1,8 @@
-import json
 import time
 import redis
 import numpy
-from src.Configuration import Configuration
 import pika as pika
+from src.Configuration import Configuration
 from pika.adapters.blocking_connection import BlockingChannel
 
 

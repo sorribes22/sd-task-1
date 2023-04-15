@@ -18,6 +18,3 @@ class PollutionSensor(Sensor):
 
     def _grpc_function_name(self) -> str:
         return "SendPollutionData"
-
-
-# PollutionSensor()

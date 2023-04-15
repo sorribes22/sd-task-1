@@ -33,7 +33,15 @@ class Configuration:
             password=os.getenv('RABBITMQ_PASSWORD')
         )})
 
-        # TODO 'server_urls': [] grpc host1:port1;host2:port2
+        self._config.update({'load_balancer_url': dict(
+            host=os.getenv('GRPC_LOAD_BALANCER_HOST'),
+            port=os.getenv('GRPC_LOAD_BALANCER_PORT')
+        )})
+
+        terminal_hosts = os.getenv('TERMINAL_HOSTS')
+        self._config.update({'grpc_server_urls': []})
+        for kv in terminal_hosts.split(";"):
+            self._config.get('grpc_server_urls').append(kv)
 
     @staticmethod
     def _get_instance():

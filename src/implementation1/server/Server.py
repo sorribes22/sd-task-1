@@ -55,7 +55,3 @@ class Server(DataProcessor__pbs_grpc.DataProcessorServiceServicer):
                 time.sleep(86400)
         except KeyboardInterrupt:
             server.stop(0)
-
-
-# s = Server(20001)
-# s.start_server()

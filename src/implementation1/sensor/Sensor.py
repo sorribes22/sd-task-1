@@ -1,11 +1,10 @@
 import random
 import time
-import os
 import grpc
 import src.implementation1.gRPC.MeteoServer_pb2_grpc as MeteoServer__pb2_grpc
 from abc import ABCMeta, abstractmethod
-from dotenv import load_dotenv
 from google.protobuf import message as _message
+from src.Configuration import Configuration
 from src.meteo_utils import MeteoDataDetector
 
 
@@ -33,10 +32,8 @@ class Sensor(metaclass=ABCMeta):
         raise NotImplementedError
 
     def _start_sensor(self) -> None:
-        load_dotenv()
-
-        load_balancer_url = '{host}:{port}'.format(host=os.getenv('GRPC_LOAD_BALANCER_HOST'),
-                                                   port=os.getenv('GRPC_LOAD_BALANCER_PORT')
+        load_balancer_url = '{host}:{port}'.format(host=Configuration.get('load_balancer_url')['host'],
+                                                   port=Configuration.get('load_balancer_url')['port']
                                                    )
         channel = grpc.insecure_channel(load_balancer_url)
         stub = MeteoServer__pb2_grpc.LoadBalancerServiceStub(channel)

@@ -1,9 +1,5 @@
-import time
-from datetime import datetime
-
 import pika
 import json
-
 import redis
 from pika.adapters.blocking_connection import BlockingChannel
 from types import SimpleNamespace
