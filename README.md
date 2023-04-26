@@ -1,10 +1,37 @@
 # SD Task 1
 
-## About this project
+## Introduction 
+In this project we have created a meteorological service where sensors collect air data, which is sent to a server where it 
+is processed and finally the processed data is distributed to terminals.
 
-resources/task1_statement.pdf
+We have different entities/classes like: Sensors, LoadBalancer (Implementation 1), Server, Proxy and Terminals, a challenge of 
+the project is to establish appropriate communication between each node.
+
+The objectives of the project are:
+- Test direct communication with gRPC in the Implementation 1.
+- Test indirect communication with RabbitMQ in Implementation2.
+- Observe the advantages and disadvantages offered by each implementation.
+- Learn the ability to decide which communication technology is better depending on the context.
+- Try Redis and RabbitMQ services.
+
 
 ## Documentation
+### Configuration
+All environment parameters are accessed through a single class called Configuration. This class is implemented using a
+Singleton pattern in order to load `.env` variables and keeping it in memory.
+
+### Redis implementation
+All the measurements stored in redis are written as 'datatype-timestamp:sample' (key:value). The values should be serialized
+into a Json in order to follow the "Open for extension, Closed for modification" principle of SOLID. But for this
+exercise we skipped it.
+
+### Sensors hierarchy
+All sensor implementations extend a Sensor abstract class that has all the communication logic.
+This class forces its implementations to define which measure send and where to send it.
+
+### Round Robin
+The Round Robin algorithm has been defined as a stub queue. When the load balancer needs a server, it pops it from the
+queue. When the server finishes his job the load balancer puts on the end of the queue the stub.
 
 ### Implementation 1
 
@@ -51,18 +78,16 @@ We have the same problem as with implementation 1 if one of these services fails
 
 We can solve it with **redundancy**.
 
-### Comparison between 2 systems
+### <a name="comparisonbetween2systems"></a>Comparison between 2 systems
 
 By performing both implementations, we have tested communication using **grpc** and **RabbitMQ**. From a programming
 perspective, it has been much easier with RabbitMQ as there are no protobuf files or port assignments for each
 communication. In terms of **fault tolerance**, we have also found that the indirect implementation with RabbitMQ is
-better,
-as with grpc, if a terminal or sensor stops working, the entire infrastructure throws an error, whereas with RabbitMQ,
-if a terminal fails, there is no problem. In terms of **scalability**, RabbitMQ is considerably better because with
-grpc, we
-reserve ports for each connection, which is hard-coded.
-On the other hand, with RabbitMQ, we create new instances and
-connect to the service to easily collect data from the queue.
+better, as with grpc, if a terminal or sensor stops working, the entire infrastructure throws an error, whereas with
+RabbitMQ, if a terminal fails, there is no problem. In terms of **scalability**, RabbitMQ is considerably better because
+with grpc, we reserve ports for each connection, which is hard-coded.
+On the other hand, with RabbitMQ, we create new instances and connect to the service to easily collect data from the
+queue.
 
 ### What does a Message Oriented Middleware provide?
 
@@ -74,10 +99,15 @@ A correct configuration gives our services a strong decoupling and the possibili
 
 Redis can be used to cache data retrieved from grpc, and Provides a very fast response time, making it an excellent
 choice for grpc systems that require low latency. On the other hand, Redis is highly scalable and can handle large volumes of data. It is easily horizontally scalable and can work in a distributed environment.
+Another advantage is the memory based storage and the matchmaking key-value, this provides fast transference.
 
+## Conclusion
+As mentioned in [this comparison](#comparisonbetween2systems), the RabbitMQ implementation is more versatile, scalable
+and flexible. We've enjoyed more developing this second implementation than the GRPC one.
+We would like to bring the RabbitMQ implementation a step further using RPCs or a RabbitMQ cluster in order to set up
+a high availability communication system.
 
-
-
+We consider this task a very instructive one and all the suggested objectives achieved.
 
 ## Deployment
 
